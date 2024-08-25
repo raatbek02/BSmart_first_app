@@ -1,7 +1,10 @@
 import 'package:bsmart_first_app/core/routes/admin_routes.dart';
 import 'package:bsmart_first_app/core/routes/auth_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,8 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // Предполагаем, что у вас есть сервис аутентификации
       // final authService = AuthService();
       // final userRole = await authService.getUserRole();
-            final userRole = "ADMIN";
-
+      final userRole = "No Role";
 
       // Вычисляем прошедшее время
       final elapsedTime = DateTime.now().difference(startTime);
@@ -69,15 +71,31 @@ class _SplashScreenState extends State<SplashScreen> {
     // Навигация на экран ошибки, если что-то пошло не так
     context.go('/error');
   }
+
   @override
   Widget build(BuildContext context) {
-        // Запускаем инициализацию и навигацию после построения виджета
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _initializeAndNavigate());
+    // Запускаем инициализацию и навигацию после построения виджета
+    // WidgetsBinding.instance
+    //     .addPostFrameCallback((_) => _initializeAndNavigate());
 
     return Scaffold(
-      body: Center(
-        child: const Text('Splash Screen'),
+      backgroundColor: const Color.fromRGBO(237, 247, 237, 1),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const Spacer(),
+            Center(
+              child: SvgPicture.asset(
+                'assets/svg/logo.svg', // Замените на ваш путь к SVG файлу
+                width: 200.w, // Настройте размер по необходимости
+                // height: 50.h,
+              ),
+            ),
+            const Spacer(),
+           
+            SizedBox(height: 20.h),
+          ],
+        ),
       ),
     );
   }
