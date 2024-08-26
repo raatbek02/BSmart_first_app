@@ -1,6 +1,9 @@
+import 'package:bsmart_first_app/core/helpers/my_logger.dart';
 import 'package:bsmart_first_app/core/routes/admin_routes.dart';
 import 'package:bsmart_first_app/core/routes/auth_routes.dart';
+import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -23,16 +26,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _initializeAndNavigate() async {
     final startTime = DateTime.now();
 
-    // Используем try-catch для обработки возможных ошибок
     try {
-      // Предполагаем, что у вас есть сервис аутентификации
-      // final authService = AuthService();
-      // final userRole = await authService.getUserRole();
-      final userRole = "No Role";
+      // Получаем статус авторизации
+      final authBloc = BlocProvider.of<AuthBloc>(context);
+      final isLoggedIn = authBloc.userLoggedIn();
 
       // Вычисляем прошедшее время
       final elapsedTime = DateTime.now().difference(startTime);
-      final remainingTime = Duration(seconds: 2) - elapsedTime;
+      final remainingTime = const Duration(seconds: 2) - elapsedTime;
 
       // Если нужно, ждем оставшееся время
       if (remainingTime.isNegative == false) {
@@ -42,28 +43,22 @@ class _SplashScreenState extends State<SplashScreen> {
       // Используем mounted для проверки, существует ли еще виджет
       if (!mounted) return;
 
-      // Навигация на основе роли пользователя
-      _navigateBasedOnRole(userRole);
+      // Навигация на основе статуса авторизации
+      _navigateBasedOnAuthStatus(isLoggedIn);
     } catch (e) {
       // Обработка ошибок
-      print('Error during initialization: $e');
+      logger.e('Error during initialization: $e');
       if (mounted) {
         _navigateToErrorScreen();
       }
     }
   }
 
-  void _navigateBasedOnRole(String userRole) {
-    switch (userRole) {
-      case 'ADMIN':
-        context.go(AdminRoutes.initial);
-        break;
-      // case 'DOCTOR':
-      //   context.go(
-      //       DoctorRoutes.initial); // Предполагая, что у вас есть DoctorRoutes
-      //   break;
-      default:
-        context.go(AuthRoutes.onBoardingPage);
+  void _navigateBasedOnAuthStatus(bool isLoggedIn) {
+    if (isLoggedIn) {
+      context.go(AdminRoutes.initial);
+    } else {
+      context.go(AuthRoutes.onBoardingPage);
     }
   }
 
@@ -74,10 +69,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Запускаем инициализацию и навигацию после построения виджета
-    // WidgetsBinding.instance
-    //     .addPostFrameCallback((_) => _initializeAndNavigate());
-
     return Scaffold(
       backgroundColor: const Color.fromRGBO(237, 247, 237, 1),
       body: SafeArea(
@@ -86,13 +77,11 @@ class _SplashScreenState extends State<SplashScreen> {
             const Spacer(),
             Center(
               child: SvgPicture.asset(
-                'assets/svg/logo.svg', // Замените на ваш путь к SVG файлу
-                width: 200.w, // Настройте размер по необходимости
-                // height: 50.h,
+                'assets/svg/logo.svg',
+                width: 200.w,
               ),
             ),
             const Spacer(),
-           
             SizedBox(height: 20.h),
           ],
         ),
@@ -100,3 +89,50 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+
+
+
+
+
+
+// Future<void> _initializeAndNavigate() async {
+//   final startTime = DateTime.now();
+
+//   try {
+//     const userRole = "ADMIN";
+
+//     // Вычисляем прошедшее время
+//     final elapsedTime = DateTime.now().difference(startTime);
+//     final remainingTime = const Duration(seconds: 2) - elapsedTime;
+
+//     // Если нужно, ждем оставшееся время
+//     if (remainingTime.isNegative == false) {
+//       await Future.delayed(remainingTime);
+//     }
+//     // Используем mounted для проверки, существует ли еще виджет
+//     if (!mounted) return;
+//     // Навигация на основе роли пользователя
+//     _navigateBasedOnRole(userRole);
+//   } catch (e) {
+//     // Обработка ошибок
+//     logger.e('Error during initialization: $e');
+//     if (mounted) {
+//       _navigateToErrorScreen();
+//     }
+//   }
+// }
+
+// void _navigateBasedOnRole(String userRole) {
+//   switch (userRole) {
+//     case 'ADMIN':
+//       context.go(AdminRoutes.initial);
+//       break;
+//     // case 'DOCTOR':
+//     //   context.go(
+//     //       DoctorRoutes.initial); // Предполагая, что у вас есть DoctorRoutes
+//     //   break;
+//     default:
+//       context.go(AuthRoutes.onBoardingPage);
+//   }
+// }
