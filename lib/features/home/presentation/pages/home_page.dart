@@ -1,6 +1,3 @@
-
-
-
 import 'package:bsmart_first_app/core/routes/auth_routes.dart';
 import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +32,8 @@ class _HomePageState extends State<HomePage> {
             context.go(AuthRoutes.onBoardingPage);
           }
         },
-        child: const Center(
-          child: Text('Main Page Content'),
+        child: Center(
+          child: Text('Main Page Content', style: TextStyle(fontSize: 14.sp)),
         ),
       ),
     );
