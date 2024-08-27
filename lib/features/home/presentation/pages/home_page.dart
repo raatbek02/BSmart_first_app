@@ -1,9 +1,14 @@
-import 'package:bsmart_first_app/core/routes/auth_routes.dart';
+import 'package:bsmart_first_app/core/common/widgets/navigation_item_card.dart';
+import 'package:bsmart_first_app/core/common/widgets/show_dynamic_modal_bottom.dart';
+import 'package:bsmart_first_app/core/helpers/my_logger.dart';
 import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:bsmart_first_app/features/home/presentation/widgets/home_navigations_widget.dart';
+import 'package:bsmart_first_app/features/home/presentation/widgets/home_statistics_widget.dart';
+import 'package:bsmart_first_app/features/home/presentation/widgets/store_and_date_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,27 +18,77 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _selectedStore;
+
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> stores = [
+      {'name': 'Bsmart shop', 'iconPath': 'assets/svg/shop_icon.svg'},
+      {'name': 'Bruno Villa', 'iconPath': 'assets/svg/shop_icon.svg'},
+      {'name': 'Mega Store', 'iconPath': 'assets/svg/shop_icon.svg'},
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Main Page'),
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: CircleAvatar(
+            radius: 32.w,
+            backgroundImage:
+                const AssetImage('assets/images/default_avatar.jpeg'),
+            backgroundColor: Colors.grey.shade300,
+          ),
+        ),
+        title: Text(
+          'Максат Кенжебаев',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.exit_to_app),
+            icon: SvgPicture.asset(
+              'assets/svg/notification_icon.svg',
+              width: 24.w,
+              colorFilter: const ColorFilter.mode(
+                Colors.black,
+                BlendMode.srcIn,
+              ),
+            ),
             onPressed: () => _showLogoutDialog(context),
           ),
         ],
       ),
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthUnauthenticated || state is AuthLogoutSuccess) {
-            // Перенаправляем пользователя на страницу входа после выхода
-            context.go(AuthRoutes.onBoardingPage);
-          }
-        },
-        child: Center(
-          child: Text('Main Page Content', style: TextStyle(fontSize: 14.sp)),
+      body: Container(
+        padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h),
+        child: ListView(
+          children: [
+            StoreAndDateSelection(
+              onStoreTap: () => Future.delayed(
+                const Duration(milliseconds: 200),
+                () => showDynamicModalBottom(
+                  context: context,
+                  title: 'Выберите магазин',
+                  items: stores,
+                  selectedValue: _selectedStore,
+                  onItemSelected: (value) {
+                    setState(() {
+                      _selectedStore = value;
+                    });
+                  },
+                ),
+              ),
+              onMonthTap: () => Future.delayed(
+                const Duration(milliseconds: 200),
+                () => logger.i("ShowCalendarBottom"),
+              ),
+            ),
+            SizedBox(height: 16.h),
+            const HomeStatisticsWidget(),
+            SizedBox(height: 16.h),
+            const HomeNavigationsWidget(),
+          ],
         ),
       ),
     );

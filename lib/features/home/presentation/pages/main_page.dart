@@ -1,7 +1,9 @@
 import 'package:bsmart_first_app/features/home/presentation/pages/home_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // class MainPage extends StatefulWidget {
 //   final int initialPage;
@@ -113,9 +115,7 @@ import 'package:flutter_svg/svg.dart';
 //   }
 // }
 
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 
 class MainPage extends StatefulWidget {
   final int initialPage;
@@ -162,7 +162,6 @@ class _MainPageState extends State<MainPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: const Color.fromRGBO(245, 247, 250, 1),
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
@@ -175,10 +174,20 @@ class _MainPageState extends State<MainPage> {
             currentIndex: value,
             onTap: onTap,
             backgroundColor: Colors.white,
+            selectedLabelStyle: GoogleFonts.poppins(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              height: 1.8,
+            ),
+
+            unselectedLabelStyle: GoogleFonts.poppins(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+              height: 1.8,
+            ),
             selectedItemColor: Colors.green,
-            unselectedItemColor: Colors.grey.shade500,
-            selectedFontSize: 12.sp,
-            unselectedFontSize: 10.sp,
+            unselectedItemColor: Colors.grey.shade400,
+            iconSize: 24.sp,
             type: BottomNavigationBarType.fixed, // Отключаем анимацию
             items: [
               BottomNavigationBarItem(
@@ -186,7 +195,7 @@ class _MainPageState extends State<MainPage> {
                   'assets/svg/bottom_navigation_icons/home_icon.svg',
                   height: 24.w, // Адаптируем размер иконок
                   colorFilter: ColorFilter.mode(
-                    value == 0 ? Colors.green : Colors.grey.shade500,
+                    value == 0 ? Colors.green : Colors.grey.shade400,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -197,7 +206,7 @@ class _MainPageState extends State<MainPage> {
                   'assets/svg/bottom_navigation_icons/products_icon.svg',
                   height: 24.w, // Адаптируем размер иконок
                   colorFilter: ColorFilter.mode(
-                    value == 1 ? Colors.green : Colors.grey.shade500,
+                    value == 1 ? Colors.green : Colors.grey.shade400,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -208,7 +217,7 @@ class _MainPageState extends State<MainPage> {
                   'assets/svg/bottom_navigation_icons/reports_icon.svg',
                   height: 24.w, // Адаптируем размер иконок
                   colorFilter: ColorFilter.mode(
-                    value == 2 ? Colors.green : Colors.grey.shade500,
+                    value == 2 ? Colors.green : Colors.grey.shade400,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -219,7 +228,7 @@ class _MainPageState extends State<MainPage> {
                   'assets/svg/bottom_navigation_icons/settings_icon.svg',
                   height: 24.w, // Адаптируем размер иконок
                   colorFilter: ColorFilter.mode(
-                    value == 3 ? Colors.green : Colors.grey.shade500,
+                    value == 3 ? Colors.green : Colors.grey.shade400,
                     BlendMode.srcIn,
                   ),
                 ),
