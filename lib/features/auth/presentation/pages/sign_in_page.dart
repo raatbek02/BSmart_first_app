@@ -3,7 +3,6 @@ import 'package:bsmart_first_app/core/helpers/my_logger.dart';
 import 'package:bsmart_first_app/core/routes/admin_routes.dart';
 import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:bsmart_first_app/features/auth/presentation/widgets/auth_textfields.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:rxdart/subjects.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});

@@ -1,71 +1,114 @@
-import 'package:bsmart_first_app/core/routes/auth_routes.dart';
-import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:bsmart_first_app/features/home/presentation/pages/home_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final int initialPage;
+  const MainPage({
+    super.key,
+    this.initialPage = 0,
+  });
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+  final currentIndex = ValueNotifier<int>(0);
+  PageController? _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex.value = widget.initialPage;
+    _pageController = PageController(initialPage: currentIndex.value);
+  }
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    super.dispose();
+  }
+
+  List<Widget> get pages => [
+        const HomePage(),
+        const HomePage(),
+        const HomePage(),
+        const HomePage(),
+      ];
+
+  void onTap(int index) {
+    currentIndex.value = index;
+    _pageController?.jumpToPage(index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Main Page'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => _showLogoutDialog(context),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          children: pages,
+          onPageChanged: (index) => currentIndex.value = index,
+        ),
+        bottomNavigationBar: ValueListenableBuilder<int>(
+          valueListenable: currentIndex,
+          builder: (_, value, __) => BottomNavigationBar(
+            currentIndex: value,
+            onTap: onTap,
+            backgroundColor: Colors.white,
+            selectedItemColor: Colors.green,
+            unselectedItemColor: Colors.grey.shade500,
+            type: BottomNavigationBarType.fixed, // Отключаем анимацию
+            items: [
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svg/bottom_navigation_icons/home_icon.svg',
+                  colorFilter: ColorFilter.mode(
+                    value == 0 ? Colors.green : Colors.grey.shade500,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                label: 'Главная',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svg/bottom_navigation_icons/products_icon.svg',
+                  colorFilter: ColorFilter.mode(
+                    value == 1 ? Colors.green : Colors.grey.shade500,
+                    BlendMode.srcIn,
+                  ),
+                ), // Товары
+                label: 'Товары',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svg/bottom_navigation_icons/reports_icon.svg',
+                  colorFilter: ColorFilter.mode(
+                    value == 2 ? Colors.green : Colors.grey.shade500,
+                    BlendMode.srcIn,
+                  ),
+                ), // Т
+                label: 'Отчеты',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svg/bottom_navigation_icons/settings_icon.svg',
+                  colorFilter: ColorFilter.mode(
+                    value == 3 ? Colors.green : Colors.grey.shade500,
+                    BlendMode.srcIn,
+                  ),
+                ), // Т
+                label: 'Настройки',
+              ),
+            ],
           ),
-        ],
-      ),
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthUnauthenticated || state is AuthLogoutSuccess) {
-            // Перенаправляем пользователя на страницу входа после выхода
-            context.go(AuthRoutes.onBoardingPage);
-          }
-        },
-        child: const Center(
-          child: Text('Main Page Content'),
         ),
       ),
     );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Выход'),
-          content: const Text('Вы уверены, что хотите выйти?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Отмена'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Выйти'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _logout(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _logout(BuildContext context) {
-    BlocProvider.of<AuthBloc>(context).add(LogoutEvent());
   }
 }
