@@ -8,10 +8,12 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   // final Color backgroundColor;
   final Color textColor;
+  final double fontSize;
+  final FontWeight fontWeight;
+  final double width;
+  final Color backgroundColor;
   final double padding;
   final double borderRadius;
-  final double width;
-  final double fontSize;
   final bool isBorder;
 
   const CustomButton({
@@ -19,11 +21,14 @@ class CustomButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.textColor = Colors.white,
+    this.fontSize = 16,
+    this.fontWeight = FontWeight.bold,
+    this.width = double.maxFinite,
+    this.backgroundColor = const Color.fromRGBO(79, 174, 71, 1),
     this.padding = 15.0,
     this.borderRadius = 15,
-    this.width = double.maxFinite,
-    this.fontSize = 16,
     this.isBorder = true,
+
   });
 
   @override
@@ -38,7 +43,7 @@ class CustomButton extends StatelessWidget {
         child: Ink(
           width: width,
           decoration: BoxDecoration(
-            color: const Color.fromRGBO(79, 174, 71, 1),
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(borderRadius.r),
             border: isBorder
                 ? Border.all(width: 2, color: Colors.grey.shade100)
@@ -53,7 +58,7 @@ class CustomButton extends StatelessWidget {
                   text,
                   style: GoogleFonts.poppins(
                     color: textColor,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: fontWeight,
                     fontSize: fontSize.sp,
                   ),
                 ),

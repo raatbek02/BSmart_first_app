@@ -1,8 +1,10 @@
 import 'package:bsmart_first_app/core/common/widgets/navigation_item_card.dart';
 import 'package:bsmart_first_app/core/helpers/my_logger.dart';
+import 'package:bsmart_first_app/core/routes/admin_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeNavigationsWidget extends StatelessWidget {
   const HomeNavigationsWidget({super.key});
@@ -13,7 +15,7 @@ class HomeNavigationsWidget extends StatelessWidget {
       children: [
         NavigationItemCard(
           icon: SvgPicture.asset(
-            'assets/svg/plus.svg',
+            'assets/svg/arrival_plus.svg',
             width: 22.w,
             colorFilter: const ColorFilter.mode(
               Colors.black,
@@ -24,12 +26,14 @@ class HomeNavigationsWidget extends StatelessWidget {
           onTap: () {
             _handleTap(() {
               logger.i("Приход товара");
+
+              context.push(AdminRoutes.arrivalRoute);
             });
           },
         ),
         NavigationItemCard(
           icon: SvgPicture.asset(
-            'assets/svg/minus.svg',
+            'assets/svg/expense_minus.svg',
             width: 22.w,
             colorFilter: const ColorFilter.mode(
               Colors.black,
@@ -40,6 +44,7 @@ class HomeNavigationsWidget extends StatelessWidget {
           onTap: () {
             _handleTap(() {
               logger.i('Расход товара');
+              context.push(AdminRoutes.expenseRoute);
             });
           },
         ),

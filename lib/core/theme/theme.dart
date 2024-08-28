@@ -34,6 +34,8 @@ class CustomTheme {
     return ThemeData(
       appBarTheme: AppBarTheme(
         color: kAppBarColor,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         iconTheme: const IconThemeData(color: Colors.black),
         titleTextStyle: appBarTitleTextStyle,
       ),
