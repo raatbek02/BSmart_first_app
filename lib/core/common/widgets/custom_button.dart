@@ -15,6 +15,7 @@ class CustomButton extends StatelessWidget {
   final double padding;
   final double borderRadius;
   final bool isBorder;
+  final Color? borderColor;
 
   const CustomButton({
     super.key,
@@ -28,7 +29,7 @@ class CustomButton extends StatelessWidget {
     this.padding = 15.0,
     this.borderRadius = 15,
     this.isBorder = true,
-
+    this.borderColor,
   });
 
   @override
@@ -46,7 +47,12 @@ class CustomButton extends StatelessWidget {
             color: backgroundColor,
             borderRadius: BorderRadius.circular(borderRadius.r),
             border: isBorder
-                ? Border.all(width: 2, color: Colors.grey.shade100)
+                ? Border.all(
+                    width: 1,
+                    color: borderColor == null
+                        ? Colors.grey.shade100
+                        : borderColor!,
+                  )
                 : null,
           ),
           child: Padding(

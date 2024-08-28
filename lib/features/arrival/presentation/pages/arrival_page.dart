@@ -1,8 +1,10 @@
 import 'package:bsmart_first_app/core/common/widgets/documents_card_widget.dart';
 import 'package:bsmart_first_app/core/helpers/my_logger.dart';
+import 'package:bsmart_first_app/core/routes/admin_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class ArrivalPage extends StatefulWidget {
   const ArrivalPage({super.key});
@@ -49,7 +51,9 @@ class _ArrivalPageState extends State<ArrivalPage> {
               'assets/svg/filter.svg',
               height: 24.w,
             ),
-            onPressed: () {},
+            onPressed: () {
+              context.push(AdminRoutes.arrivalFilterPage);
+            },
           ),
         ],
       ),
