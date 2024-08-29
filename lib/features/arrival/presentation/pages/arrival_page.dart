@@ -74,6 +74,7 @@ class _ArrivalPageState extends State<ArrivalPage> {
                   // },
                   onDetailPressed: () {
                     logger.i("Посмотреть подробно: ${doc['documentNumber']}");
+                    context.push(AdminRoutes.productDetailPage);
                   },
                 );
               }),

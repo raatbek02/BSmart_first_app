@@ -1,7 +1,9 @@
 import 'package:bsmart_first_app/core/common/widgets/custom_button.dart';
 import 'package:bsmart_first_app/core/common/widgets/product_card_v1.dart';
+import 'package:bsmart_first_app/core/routes/admin_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateArrivalTopSection extends StatelessWidget {
   CreateArrivalTopSection({super.key});
@@ -101,7 +103,9 @@ class CreateArrivalTopSection extends StatelessWidget {
                   fontSize: 14,
                   padding: 10,
                   borderRadius: 50,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push(AdminRoutes.productsPage);
+                  },
                 )
               ],
             ),

@@ -1,6 +1,8 @@
 import 'package:bsmart_first_app/features/arrival/presentation/pages/arrival_filter_page.dart';
 import 'package:bsmart_first_app/features/arrival/presentation/pages/arrival_page.dart';
 import 'package:bsmart_first_app/features/arrival/presentation/pages/create_arrival_page.dart';
+import 'package:bsmart_first_app/features/arrival/presentation/pages/product_detail_page.dart';
+import 'package:bsmart_first_app/features/arrival/presentation/pages/products_page.dart';
 import 'package:bsmart_first_app/features/expense/presentation/pages/expense_page.dart';
 import 'package:bsmart_first_app/features/home/presentation/pages/main_page.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +13,8 @@ class AdminRoutes {
   static const String arrivalRoute = "/admin/arrival-page";
   static const String arrivalFilterPage = "/admin/arrival-filter-page";
   static const String createArrivalPage = "/admin/create-arrival-page";
+  static const String productsPage = "/admin/products-page";
+  static const String productDetailPage = "/admin/product-detail-page";
   // Expense Page
   static const String expenseRoute = "/admin/expense-page";
   static const String expenseFilterPage = "/admin/expense-filter-page";
@@ -33,6 +37,15 @@ class AdminRoutes {
       path: createArrivalPage,
       builder: (context, state) => const CreateArrivalPage(),
     ),
+    GoRoute(
+      path: productsPage,
+      builder: (context, state) => const ProductsPage(),
+    ),
+        GoRoute(
+      path: productDetailPage,
+      builder: (context, state) => const ProductDetailPage(),
+    ),
+
 
     // Expense Page
     GoRoute(

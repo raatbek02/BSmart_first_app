@@ -7,7 +7,6 @@ class ProductCardV1 extends StatefulWidget {
   final String productName;
   final int quantity;
   final int price;
-  final bool hasQuantity;
 
   const ProductCardV1({
     super.key,
@@ -15,7 +14,6 @@ class ProductCardV1 extends StatefulWidget {
     required this.productName,
     required this.quantity,
     required this.price,
-    this.hasQuantity = true,
   });
 
   @override
@@ -47,7 +45,7 @@ class _ProductCardV1State extends State<ProductCardV1> {
           children: [
             _buildInfoRow("${widget.productType}: ", widget.productName),
             _buildInfoRow('Остаток на складе: ', '${widget.quantity}'),
-            if (widget.hasQuantity) _buildQuantityAndPriceRow(),
+            _buildQuantityAndPriceRow()
           ],
         ),
       ),
@@ -82,7 +80,7 @@ class _ProductCardV1State extends State<ProductCardV1> {
       children: [
         Row(
           children: [
-            _buildQuantityButton(
+            _buildButtons(
               icon: Icons.remove,
               onPressed: () {
                 if (currentQuantity > 0) {
@@ -103,7 +101,7 @@ class _ProductCardV1State extends State<ProductCardV1> {
                 ),
               ),
             ),
-            _buildQuantityButton(
+            _buildButtons(
               icon: Icons.add,
               onPressed: () {
                 if (currentQuantity < widget.quantity) {
@@ -127,7 +125,7 @@ class _ProductCardV1State extends State<ProductCardV1> {
     );
   }
 
-  Widget _buildQuantityButton({
+  Widget _buildButtons({
     required IconData icon,
     required VoidCallback onPressed,
   }) {

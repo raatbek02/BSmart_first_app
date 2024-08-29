@@ -1,3 +1,4 @@
+import 'package:bsmart_first_app/core/helpers/my_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -37,11 +38,10 @@ class SearchWidget extends StatelessWidget {
             ),
             contentPadding: EdgeInsets.symmetric(
               horizontal: 16.w,
-              vertical: 15.w,
+              vertical: 12.w,
             ),
             prefixIcon: Padding(
-              padding: EdgeInsets.only(
-                  left: 16.w, right: 10.w), // Добавляем отступ слева
+              padding: EdgeInsets.only(left: 16.w, right: 10.w),
               child: SvgPicture.asset(
                 'assets/svg/search.svg',
                 width: 22.sp,
@@ -52,7 +52,7 @@ class SearchWidget extends StatelessWidget {
               ),
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(24.r),
               borderSide: const BorderSide(width: 1, color: Colors.grey),
             ),
             filled: true,
@@ -79,7 +79,7 @@ class SearchWidget extends StatelessWidget {
         );
       },
       onSelected: (suggestion) {
-        print('Выбран товар: $suggestion'); // Заменено logger.i на print
+        logger.i('Выбран товар: $suggestion');
       },
       emptyBuilder: (context) => const ListTile(
         title: Text('Товары не найдены'),
