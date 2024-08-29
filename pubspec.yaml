@@ -38,6 +38,7 @@ dependencies:
   awesome_dialog: ^3.2.0
   flutter_svg: ^2.0.10+1
   convex_bottom_bar: ^3.2.0
+  flutter_typeahead: ^5.2.0
   # Architecture
   flutter_bloc: ^8.1.4 
   get_it: ^7.2.0

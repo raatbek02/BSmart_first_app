@@ -1,5 +1,5 @@
 import 'package:bsmart_first_app/core/common/widgets/custom_button.dart';
-import 'package:bsmart_first_app/core/common/widgets/product_card_v1.dart';
+import 'package:bsmart_first_app/core/common/widgets/search_widget.dart';
 import 'package:bsmart_first_app/core/helpers/my_logger.dart';
 import 'package:bsmart_first_app/features/arrival/presentation/widgets/create_arrival_widgets/create_arrival_bottom_section.dart';
 import 'package:bsmart_first_app/features/arrival/presentation/widgets/create_arrival_widgets/create_arrival_top_section.dart';
@@ -14,27 +14,6 @@ class CreateArrivalPage extends StatefulWidget {
 }
 
 class _CreateArrivalPageState extends State<CreateArrivalPage> {
-  final List<Map<String, dynamic>> productsList = [
-    {
-      'productType': 'Сумка',
-      'productName': 'Michael Kors',
-      'quantity': 24,
-      'price': 12000,
-    },
-    {
-      'productType': 'Сумка',
-      'productName': 'Michael Kors',
-      'quantity': 24,
-      'price': 12000,
-    },
-    {
-      'productType': 'Сумка',
-      'productName': 'Michael Kors',
-      'quantity': 24,
-      'price': 12000,
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,16 +24,40 @@ class _CreateArrivalPageState extends State<CreateArrivalPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text('Создание записи прихода'),
+        title: Text(
+          'Создание записи прихода',
+          style: TextStyle(fontSize: 18.sp),
+        ),
       ),
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.all(16.w),
           child: ListView(
             children: [
+              SearchWidget(),
+              SizedBox(height: 16.h),
               CreateArrivalTopSection(),
               SizedBox(height: 16.h),
               const CreateArrivalBottomSection(),
+              SizedBox(height: 20.h),
+              CustomButton(
+                text: "Оприходовать",
+                padding: 14,
+                onPressed: () {
+                  logger.i("Оприходовать");
+                },
+              ),
+              SizedBox(height: 10.h),
+              CustomButton(
+                text: "Сохранить как черновик",
+                textColor: Colors.green,
+                backgroundColor: Colors.transparent,
+                borderColor: Colors.grey,
+                padding: 12,
+                onPressed: () {
+                  logger.i("Сохранить как черновик");
+                },
+              ),
             ],
           ),
         ),

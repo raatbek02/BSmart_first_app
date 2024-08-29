@@ -43,7 +43,7 @@ class _ArrivalFilterPageState extends State<ArrivalFilterPage> {
                 onTap: () {},
                 label: "Поставщик",
                 verticalPadding: 16,
-                nameColor: Color.fromARGB(255, 255, 249, 249),
+                nameColor: const Color.fromRGBO(153, 153, 153, 1),
                 iconColor: const Color.fromRGBO(153, 153, 153, 1),
               ),
             ],
@@ -53,5 +53,3 @@ class _ArrivalFilterPageState extends State<ArrivalFilterPage> {
     );
   }
 }
-
-

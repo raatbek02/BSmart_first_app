@@ -1,3 +1,4 @@
+import 'package:bsmart_first_app/core/common/widgets/custom_button.dart';
 import 'package:bsmart_first_app/core/common/widgets/product_card_v1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -92,6 +93,16 @@ class CreateArrivalTopSection extends StatelessWidget {
                     ),
                   ],
                 ),
+                SizedBox(height: 16.h),
+                CustomButton(
+                  text: "Добавить товар",
+                  backgroundColor: Colors.grey.shade200,
+                  textColor: Colors.green,
+                  fontSize: 14,
+                  padding: 10,
+                  borderRadius: 50,
+                  onPressed: () {},
+                )
               ],
             ),
           ),

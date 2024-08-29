@@ -7,6 +7,7 @@ class ProductCardV1 extends StatefulWidget {
   final String productName;
   final int quantity;
   final int price;
+  final bool hasQuantity;
 
   const ProductCardV1({
     super.key,
@@ -14,6 +15,7 @@ class ProductCardV1 extends StatefulWidget {
     required this.productName,
     required this.quantity,
     required this.price,
+    this.hasQuantity = true,
   });
 
   @override
@@ -45,7 +47,7 @@ class _ProductCardV1State extends State<ProductCardV1> {
           children: [
             _buildInfoRow("${widget.productType}: ", widget.productName),
             _buildInfoRow('Остаток на складе: ', '${widget.quantity}'),
-            _buildQuantityAndPriceRow(),
+            if (widget.hasQuantity) _buildQuantityAndPriceRow(),
           ],
         ),
       ),
