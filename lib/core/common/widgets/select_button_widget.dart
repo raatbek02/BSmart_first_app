@@ -5,12 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SelectButtonWidget extends StatelessWidget {
   final String name;
   final Color nameColor;
+  final double nameSize;
   final VoidCallback onTap;
   final IconData icon;
   final Color iconColor;
   final double iconSize;
   final double verticalPadding;
   final String? label;
+  final double labelSize;
+  final bool isRequired;
 
   const SelectButtonWidget({
     super.key,
@@ -19,9 +22,12 @@ class SelectButtonWidget extends StatelessWidget {
     this.verticalPadding = 12,
     this.icon = CupertinoIcons.chevron_down,
     this.nameColor = Colors.black,
+    this.nameSize = 16,
     this.iconColor = Colors.black,
     this.iconSize = 22,
     this.label,
+    this.labelSize = 16,
+    this.isRequired = false,
   });
 
   @override
@@ -31,13 +37,19 @@ class SelectButtonWidget extends StatelessWidget {
         if (label != null)
           Row(
             children: [
+              if (isRequired)
+                Text(
+                  '*',
+                  style: TextStyle(color: Colors.red, fontSize: 16.sp),
+                ),
+              const SizedBox(width: 4),
               Padding(
                 padding: EdgeInsets.only(bottom: 8.w),
                 child: Text(
                   label!,
                   style: TextStyle(
                     color: const Color.fromRGBO(92, 95, 91, 1),
-                    fontSize: 16.sp,
+                    fontSize: labelSize.sp,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -62,7 +74,7 @@ class SelectButtonWidget extends StatelessWidget {
                     name,
                     style: TextStyle(
                       color: nameColor,
-                      fontSize: 16.sp,
+                      fontSize: nameSize.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

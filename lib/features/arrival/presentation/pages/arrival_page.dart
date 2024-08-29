@@ -82,6 +82,8 @@ class _ArrivalPageState extends State<ArrivalPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           logger.i('Добавить приход товара');
+
+          context.push(AdminRoutes.createArrivalPage);
         },
         backgroundColor: Colors.green,
         child: SvgPicture.asset(
