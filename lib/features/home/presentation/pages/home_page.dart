@@ -20,6 +20,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String? _selectedStore;
 
+  String userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    BlocProvider.of<AuthBloc>(context).getUserName().then((value) {
+      setState(() {
+        userName = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Map<String, String>> stores = [
@@ -40,7 +53,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         title: Text(
-          'Максат Кенжебаев',
+          userName,
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 16.sp,

@@ -7,9 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-// auth_bloc.dart
-// import 'package:flutter_bloc/flutter_bloc.dart';
-
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCase authUseCase;
 
@@ -21,14 +18,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
   }
 
-Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     logger.i("AuthLoading state emitted");
+
     final result = await authUseCase.call(SignInParams(SignInEntity(
       email: event.email.trim(),
       password: event.password.trim(),
     )));
+
     logger.i("Result received: $result");
+
     await result.fold(
       (failure) async {
         logger.e("Auth failure: ${failure.message}");
@@ -39,9 +39,20 @@ Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
         logger.i("Auth status code: ${response.statusCode}");
         if (response.statusCode == 200) {
           // Успешный вход
-          await authUseCase.saveUserToken(response.data["access_token"]);
-          // await authUseCase.saveUserRole(response.data['role']);
-          emit(AuthSignInSuccess(token: response.data['access_token']));
+          final token = response.data["access_token"];
+          final saveResult = await authUseCase.saveUserToken(token);
+          if (saveResult) {
+            final userData = await authUseCase.getUserData();
+            emit(AuthSignInSuccess(
+              token: token,
+              userId: userData['userId'] ?? '',
+              role: userData['role'] ?? '',
+              organizationId: userData['organizationId'] ?? '',
+              name: userData['name'] ?? '',
+            ));
+          } else {
+            emit(AuthFailure('Ошибка при сохранении данных пользователя'));
+          }
         } else {
           // Обработка ошибки
           String errorMessage =
@@ -56,7 +67,6 @@ Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
     );
   }
 
-
   Future<void> _onLogout(LogoutEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     logger.i("Logging out...");
@@ -70,7 +80,14 @@ Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
     final isLoggedIn = authUseCase.userLoggedIn();
     if (isLoggedIn) {
       final token = await authUseCase.getUserToken();
-      emit(AuthSignInSuccess(token: token));
+      final userData = await authUseCase.getUserData();
+      emit(AuthSignInSuccess(
+        token: token,
+        userId: userData['userId'] ?? '',
+        role: userData['role'] ?? '',
+        organizationId: userData['organizationId'] ?? '',
+        name: userData['name'] ?? '',
+      ));
     } else {
       emit(AuthUnauthenticated());
     }
@@ -79,12 +96,106 @@ Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
   bool userLoggedIn() {
     return authUseCase.userLoggedIn();
   }
+  Future<String> getUserId() async {
+    final userData = await authUseCase.getUserData();
+    return userData['userId'] ?? '';
+  }
+
+  Future<String> getUserRole() async {
+    final userData = await authUseCase.getUserData();
+    return userData['role'] ?? '';
+  }
+
+  Future<String> getOrganizationId() async {
+    final userData = await authUseCase.getUserData();
+    return userData['organizationId'] ?? '';
+  }
+
+  Future<String> getUserName() async {
+    final userData = await authUseCase.getUserData();
+    return userData['name'] ?? '';
+  }
 
 
   Future<void> _logout() async {
     authUseCase.clearSharedData();
   }
 }
+// class AuthBloc extends Bloc<AuthEvent, AuthState> {
+//   final AuthUseCase authUseCase;
+
+//   AuthBloc({
+//     required this.authUseCase,
+//   }) : super(AuthInitial()) {
+//     on<SignInEvent>(_onSignIn);
+//     on<LogoutEvent>(_onLogout);
+//     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
+//   }
+
+// Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
+//     emit(AuthLoading());
+//     logger.i("AuthLoading state emitted");
+//     final result = await authUseCase.call(SignInParams(SignInEntity(
+//       email: event.email.trim(),
+//       password: event.password.trim(),
+//     )));
+//     logger.i("Result received: $result");
+//     await result.fold(
+//       (failure) async {
+//         logger.e("Auth failure: ${failure.message}");
+//         emit(AuthFailure(failure.message));
+//       },
+//       (response) async {
+//         logger.i("Auth response: ${response.data}");
+//         logger.i("Auth status code: ${response.statusCode}");
+//         if (response.statusCode == 200) {
+//           // Успешный вход
+//           await authUseCase.saveUserToken(response.data["access_token"]);
+//           // await authUseCase.saveUserRole(response.data['role']);
+//           emit(AuthSignInSuccess(token: response.data['access_token']));
+//         } else {
+//           // Обработка ошибки
+//           String errorMessage =
+//               response.statusMessage ?? 'Произошла ошибка при входе';
+//           if (response.data != null && response.data['message'] != null) {
+//             errorMessage = response.data['message'];
+//           }
+//           logger.e("Error auth login: $errorMessage");
+//           emit(AuthFailure(errorMessage));
+//         }
+//       },
+//     );
+//   }
+
+
+//   Future<void> _onLogout(LogoutEvent event, Emitter<AuthState> emit) async {
+//     emit(AuthLoading());
+//     logger.i("Logging out...");
+//     await _logout();
+//     emit(AuthUnauthenticated());
+//     emit(AuthLogoutSuccess());
+//   }
+
+//   Future<void> _onCheckAuthStatus(
+//       CheckAuthStatusEvent event, Emitter<AuthState> emit) async {
+//     final isLoggedIn = authUseCase.userLoggedIn();
+//     if (isLoggedIn) {
+//       final token = await authUseCase.getUserToken();
+//       emit(AuthSignInSuccess(token: token));
+//     } else {
+//       emit(AuthUnauthenticated());
+//     }
+//   }
+
+//   bool userLoggedIn() {
+//     return authUseCase.userLoggedIn();
+//   }
+
+
+//   Future<void> _logout() async {
+//     authUseCase.clearSharedData();
+//   }
+// }
 
 
 

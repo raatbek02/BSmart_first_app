@@ -47,7 +47,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
         title: const Text('Карточка товара'),
 
-        actions: [],
+        actions: [], // Icon for move to edit products page
       ),
       body: SafeArea(
         child: Container(

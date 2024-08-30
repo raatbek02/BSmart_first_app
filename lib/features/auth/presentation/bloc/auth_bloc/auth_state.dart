@@ -1,7 +1,5 @@
 part of 'auth_bloc.dart';
 
-
-
 abstract class AuthState extends Equatable {
   const AuthState();
 
@@ -15,15 +13,21 @@ class AuthLoading extends AuthState {}
 
 class AuthSignInSuccess extends AuthState {
   final String token;
-  // final String role;
+  final String userId;
+  final String role;
+  final String name;
+  final String organizationId;
 
-  const AuthSignInSuccess({required this.token});
-
+  AuthSignInSuccess({
+    required this.token,
+    required this.userId,
+    required this.role,
+    required this.name,
+    required this.organizationId,
+  });
   @override
-  List<Object?> get props => [token];
+  List<Object?> get props => [token, userId, role, name, organizationId];
 }
-
-
 
 class AuthUnauthenticated extends AuthState {}
 
