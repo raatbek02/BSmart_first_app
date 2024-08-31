@@ -1,4 +1,4 @@
-import 'package:bsmart_first_app/core/api/%C2%A0api_constants.dart';
+import 'package:bsmart_first_app/core/api/api_constants.dart';
 import 'package:bsmart_first_app/core/api/api_client.dart';
 import 'package:bsmart_first_app/core/errors/errors.dart';
 import 'package:bsmart_first_app/core/helpers/my_logger.dart';
@@ -41,11 +41,11 @@ class AuthUseCase implements UseCase<Response, Params> {
   }
 
   bool userLoggedIn() {
-    return sharedPreferences.containsKey(AppConstants.TOKEN);
+    return sharedPreferences.containsKey(ApiConstants.TOKEN);
   }
 
   Future<bool> saveUserToken(String token) async {
-    await sharedPreferences.setString(AppConstants.TOKEN, token);
+    await sharedPreferences.setString(ApiConstants.TOKEN, token);
 
     try {
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
@@ -67,7 +67,7 @@ class AuthUseCase implements UseCase<Response, Params> {
   }
 
   Future<String> getUserToken() async {
-    return sharedPreferences.getString(AppConstants.TOKEN) ?? '';
+    return sharedPreferences.getString(ApiConstants.TOKEN) ?? '';
   }
 
   Future<Map<String, String>> getUserData() async {
@@ -121,23 +121,23 @@ class SignInParams extends Params<SignInEntity> {
 //   }
 
 //   bool userLoggedIn() {
-//     return sharedPreferences.containsKey(AppConstants.TOKEN);
+//     return sharedPreferences.containsKey(ApiConstants.TOKEN);
 //   }
 
 //   Future<bool> saveUserToken(String token) async {
-//     await sharedPreferences.setString(AppConstants.TOKEN, token);
+//     await sharedPreferences.setString(ApiConstants.TOKEN, token);
 //     // Обновление токена в ApiClient больше не требуется, так как это делается автоматически через AuthInterceptor
 //     return true;
 //   }
 
 //   Future<String> getUserToken() async {
-//     return sharedPreferences.getString(AppConstants.TOKEN) ?? '';
+//     return sharedPreferences.getString(ApiConstants.TOKEN) ?? '';
 //   }
 
 
 
 //   bool clearSharedData() {
-//     sharedPreferences.remove(AppConstants.TOKEN);
+//     sharedPreferences.remove(ApiConstants.TOKEN);
 //     // Обновление токена в ApiClient больше не требуется
 //     return true;
 //   }

@@ -10,13 +10,26 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCase authUseCase;
 
-  AuthBloc({
-    required this.authUseCase,
-  }) : super(AuthInitial()) {
+  // Приватные поля для хранения данных пользователя
+  String _userId = '';
+  String _userRole = '';
+  String _organizationId = '';
+  String _userName = '';
+  String _token = '';
+
+  AuthBloc({required this.authUseCase}) : super(AuthInitial()) {
     on<SignInEvent>(_onSignIn);
     on<LogoutEvent>(_onLogout);
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
+    on<LoadUserDataEvent>(_onLoadUserData);
   }
+
+  // Геттеры для доступа к данным пользователя
+  String get userId => _userId;
+  String get userRole => _userRole;
+  String get organizationId => _organizationId;
+  String get userName => _userName;
+  String get token => _token;
 
   Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
@@ -37,24 +50,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (response) async {
         logger.i("Auth response: ${response.data}");
         logger.i("Auth status code: ${response.statusCode}");
+
         if (response.statusCode == 200) {
-          // Успешный вход
-          final token = response.data["access_token"];
-          final saveResult = await authUseCase.saveUserToken(token);
+          _token = response.data["access_token"];
+          final saveResult = await authUseCase.saveUserToken(_token);
           if (saveResult) {
-            final userData = await authUseCase.getUserData();
+            await _loadAndUpdateUserData();
             emit(AuthSignInSuccess(
-              token: token,
-              userId: userData['userId'] ?? '',
-              role: userData['role'] ?? '',
-              organizationId: userData['organizationId'] ?? '',
-              name: userData['name'] ?? '',
+              token: _token,
+              userId: _userId,
+              role: _userRole,
+              organizationId: _organizationId,
+              name: _userName,
             ));
           } else {
             emit(AuthFailure('Ошибка при сохранении данных пользователя'));
           }
         } else {
-          // Обработка ошибки
           String errorMessage =
               response.statusMessage ?? 'Произошла ошибка при входе';
           if (response.data != null && response.data['message'] != null) {
@@ -71,6 +83,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     logger.i("Logging out...");
     await _logout();
+    _clearUserData();
     emit(AuthUnauthenticated());
     emit(AuthLogoutSuccess());
   }
@@ -79,46 +92,63 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       CheckAuthStatusEvent event, Emitter<AuthState> emit) async {
     final isLoggedIn = authUseCase.userLoggedIn();
     if (isLoggedIn) {
-      final token = await authUseCase.getUserToken();
-      final userData = await authUseCase.getUserData();
+      await _loadAndUpdateUserData();
       emit(AuthSignInSuccess(
-        token: token,
-        userId: userData['userId'] ?? '',
-        role: userData['role'] ?? '',
-        organizationId: userData['organizationId'] ?? '',
-        name: userData['name'] ?? '',
+        token: _token,
+        userId: _userId,
+        role: _userRole,
+        organizationId: _organizationId,
+        name: _userName,
       ));
     } else {
       emit(AuthUnauthenticated());
     }
   }
 
+  Future<void> _onLoadUserData(
+      LoadUserDataEvent event, Emitter<AuthState> emit) async {
+    final isLoggedIn = authUseCase.userLoggedIn();
+    if (isLoggedIn) {
+      await _loadAndUpdateUserData();
+      emit(AuthSignInSuccess(
+        token: _token,
+        userId: _userId,
+        role: _userRole,
+        organizationId: _organizationId,
+        name: _userName,
+      ));
+    } else {
+      emit(AuthUnauthenticated());
+    }
+  }
+
+  Future<void> _loadAndUpdateUserData() async {
+    _token = await authUseCase.getUserToken();
+    final userData = await authUseCase.getUserData();
+    _updateUserData(userData);
+  }
+
+  void _updateUserData(Map<String, dynamic> userData) {
+    _userId = userData['userId'] ?? '';
+    _userRole = userData['role'] ?? '';
+    _organizationId = userData['organizationId'] ?? '';
+    _userName = userData['name'] ?? '';
+  }
+
+  void _clearUserData() {
+    _userId = '';
+    _userRole = '';
+    _organizationId = '';
+    _userName = '';
+    _token = '';
+  }
+
   bool userLoggedIn() {
     return authUseCase.userLoggedIn();
   }
-  Future<String> getUserId() async {
-    final userData = await authUseCase.getUserData();
-    return userData['userId'] ?? '';
-  }
-
-  Future<String> getUserRole() async {
-    final userData = await authUseCase.getUserData();
-    return userData['role'] ?? '';
-  }
-
-  Future<String> getOrganizationId() async {
-    final userData = await authUseCase.getUserData();
-    return userData['organizationId'] ?? '';
-  }
-
-  Future<String> getUserName() async {
-    final userData = await authUseCase.getUserData();
-    return userData['name'] ?? '';
-  }
-
 
   Future<void> _logout() async {
-    authUseCase.clearSharedData();
+    await authUseCase.clearSharedData();
   }
 }
 // class AuthBloc extends Bloc<AuthEvent, AuthState> {

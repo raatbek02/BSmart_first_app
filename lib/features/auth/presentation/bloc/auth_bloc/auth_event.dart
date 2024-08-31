@@ -17,6 +17,9 @@ class SignInEvent extends AuthEvent {
   List<Object?> get props => [email, password];
 }
 
+class LoadUserDataEvent extends AuthEvent {}
+
+
 
 
 

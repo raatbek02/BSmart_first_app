@@ -1,4 +1,3 @@
-import 'package:bsmart_first_app/core/common/widgets/navigation_item_card.dart';
 import 'package:bsmart_first_app/core/common/widgets/show_dynamic_modal_bottom.dart';
 import 'package:bsmart_first_app/core/helpers/my_logger.dart';
 import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -19,18 +18,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? _selectedStore;
-
-  String userName = '';
+  late String _userName;
 
   @override
   void initState() {
     super.initState();
-
-    BlocProvider.of<AuthBloc>(context).getUserName().then((value) {
-      setState(() {
-        userName = value;
-      });
-    });
+    _userName = context.read<AuthBloc>().userName;
   }
 
   @override
@@ -53,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         title: Text(
-          userName,
+          _userName,
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 16.sp,

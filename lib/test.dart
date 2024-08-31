@@ -204,6 +204,7 @@
 //   }
 // }
 
+import 'package:bsmart_first_app/core/api/api_constants.dart';
 import 'package:bsmart_first_app/core/utils/app_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -294,7 +295,7 @@ class _AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final token = sharedPreferences.getString(AppConstants.TOKEN) ?? "";
+    final token = sharedPreferences.getString(ApiConstants.TOKEN) ?? "";
     options.headers['Authorization'] = 'Bearer $token';
     // options.headers['Content-Type'] = 'application/json; charset=UTF-8';
     options.headers['Content-Type'] = 'application/json';

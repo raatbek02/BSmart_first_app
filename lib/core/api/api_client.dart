@@ -1,3 +1,4 @@
+import 'package:bsmart_first_app/core/api/api_constants.dart';
 import 'package:bsmart_first_app/core/helpers/my_logger.dart';
 import 'package:bsmart_first_app/core/utils/app_constants.dart';
 import 'package:dio/dio.dart';
@@ -152,7 +153,7 @@ class _AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final token = sharedPreferences.getString(AppConstants.TOKEN);
+    final token = sharedPreferences.getString(ApiConstants.TOKEN);
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
       logger.i("Added Authorization header: Bearer $token");

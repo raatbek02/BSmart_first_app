@@ -1,19 +1,23 @@
-
 import 'package:bsmart_first_app/core/di/locator_service.dart';
+import 'package:bsmart_first_app/features/arrival/presentation/bloc/arrival_bloc.dart';
 import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppBlocProviders extends StatelessWidget {
   final Widget child;
+  final AuthBloc authBloc;
 
-  const AppBlocProviders({super.key, required this.child});
+  const AppBlocProviders(
+      {super.key, required this.child, required this.authBloc});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(create: (context) => sl<AuthBloc>()),
+        BlocProvider<AuthBloc>.value(value: authBloc),
+
+        BlocProvider<ArrivalBloc>(create: (context)=> sl<ArrivalBloc>())
 
         // BlocProvider<CategoriesBloc>(
         //   create: (context) => sl<CategoriesBloc>(),
