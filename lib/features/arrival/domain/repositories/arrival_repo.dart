@@ -1,4 +1,5 @@
 import 'package:bsmart_first_app/core/errors/errors.dart';
+import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_detail_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_entitity.dart';
 import 'package:dartz/dartz.dart';
 
@@ -8,4 +9,9 @@ abstract class ArrivalRepo {
     int page = 0,
     int size = 10,
   });
+
+  Future<Either<Failure, ArrivalDetailEntity>> getArrivalDetail(
+    String organizationId,
+    String id,
+  );
 }

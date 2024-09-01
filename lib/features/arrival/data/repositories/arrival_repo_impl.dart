@@ -1,5 +1,6 @@
 import 'package:bsmart_first_app/core/errors/errors.dart';
 import 'package:bsmart_first_app/features/arrival/data/datasources/arrival_remote_datasource.dart';
+import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_detail_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_entitity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/repositories/arrival_repo.dart';
 import 'package:dartz/dartz.dart';
@@ -22,5 +23,21 @@ class ArrivalRepoImpl implements ArrivalRepo {
     } catch (e) {
       return Left(Failure("List of arrival FAILED: ${e.toString()}"));
     }
+  }
+
+  @override
+  Future<Either<Failure, ArrivalDetailEntity>> getArrivalDetail(
+      String organizationId, String id) async {
+  
+    try { 
+      ArrivalDetailEntity results = await remoteDatasource.getArrivalDetail(
+        organizationId,
+        id,
+      );
+      return Right(results);
+    } catch (e) {
+      return Left(Failure("Arrival detail FAAAILED: ${e.toString()}"));
+    }
+    
   }
 }

@@ -1,6 +1,8 @@
 import 'package:bsmart_first_app/core/common/widgets/custom_button.dart';
+import 'package:bsmart_first_app/core/helpers/status_translator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class DocumentsCardWidget extends StatelessWidget {
   final String documentNumber;
@@ -34,11 +36,12 @@ class DocumentsCardWidget extends StatelessWidget {
           children: [
             _buildInfoRow('Номер документа', documentNumber),
             _buildInfoRow('Поставщик', supplier),
-            _buildInfoRow('Итого закупечная', totalAmount),
+            _buildInfoRow('Итого закупочная', totalAmount),
             _buildInfoRow(
               'Статус',
-              status,
+              StatusTranslator.translate(status),
               isStatus: true,
+              statusColor: StatusTranslator.getStatusColor(status),
               hasBottomPadding: showButton ? true : false,
             ),
             if (showButton)
@@ -61,7 +64,9 @@ class DocumentsCardWidget extends StatelessWidget {
   }
 
   Widget _buildInfoRow(String label, String value,
-      {bool isStatus = false, bool hasBottomPadding = true}) {
+      {bool isStatus = false,
+      Color? statusColor,
+      bool hasBottomPadding = true}) {
     return Padding(
       padding:
           hasBottomPadding ? EdgeInsets.only(bottom: 15.w) : EdgeInsets.zero,
@@ -76,7 +81,7 @@ class DocumentsCardWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               color: isStatus
-                  ? const Color.fromRGBO(76, 178, 189, 1)
+                  ? statusColor ?? const Color.fromRGBO(76, 178, 189, 1)
                   : const Color.fromRGBO(24, 24, 24, 1),
             ),
           ),

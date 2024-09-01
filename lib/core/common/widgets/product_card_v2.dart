@@ -6,7 +6,7 @@ class ProductCardV2 extends StatelessWidget {
   final String productType;
   final String productName;
   final int quantity;
-  final int price;
+  final double price;
   final String productStatus;
   final bool showPlusButton;
 

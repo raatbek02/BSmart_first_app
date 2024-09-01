@@ -1,8 +1,9 @@
+import 'package:bsmart_first_app/core/common/widgets/custom_loading.dart';
 import 'package:bsmart_first_app/core/common/widgets/documents_card_widget.dart';
 import 'package:bsmart_first_app/core/helpers/my_logger.dart';
 import 'package:bsmart_first_app/core/routes/admin_routes.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_entitity.dart';
-import 'package:bsmart_first_app/features/arrival/presentation/bloc/arrival_bloc.dart';
+import 'package:bsmart_first_app/features/arrival/presentation/bloc/arrival_bloc/arrival_bloc.dart';
 import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +53,7 @@ class ArrivalView extends StatelessWidget {
         child: BlocBuilder<ArrivalBloc, ArrivalState>(
           builder: (context, state) {
             if (state is ArrivalLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const CustomLoadingWidget();
             } else if (state is ArrivalLoaded) {
               return ArrivalListView(arrivals: state.arrival.content);
             } else if (state is ArrivalError) {
@@ -88,26 +89,46 @@ class ArrivalListView extends StatelessWidget {
 
   const ArrivalListView({super.key, required this.arrivals});
 
+  Future<void> _handleRefresh(BuildContext context) async {
+    logger.i("Обновление данных");
+    final String organizationId = context.read<AuthBloc>().organizationId;
+    context.read<ArrivalBloc>().add(
+          FetchArrivalListEvent(
+            organizationId: organizationId,
+            forceRefresh: true,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h),
-      itemCount: arrivals.length,
-      itemBuilder: (context, index) {
-        final arrival = arrivals[index];
-        return DocumentsCardWidget(
-          documentNumber: arrival.documentNumber,
-          // supplier: arrival.provider,
-          supplier: "Данил Усманов",
+    return RefreshIndicator(
+      onRefresh: () => _handleRefresh(context),
+      backgroundColor: Colors.white,
+      color: Colors.black,
+      child: ListView.builder(
+        padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.h),
+        itemCount: arrivals.length,
+        itemBuilder: (context, index) {
+          final arrival = arrivals[index];
+          return DocumentsCardWidget(
+            documentNumber: arrival.documentNumber,
+            // supplier: arrival.provider,
+            supplier: "Данил Усманов",
 
-          totalAmount: '${arrival.totalSumFinal} KGS',
-          status: arrival.state,
-          onDetailPressed: () {
-            logger.i("Посмотреть подробно: ${arrival.documentNumber}");
-            context.push(AdminRoutes.productDetailPage);
-          },
-        );
-      },
+            totalAmount: '${arrival.totalSumFinal} KGS',
+            status: arrival.state,
+            onDetailPressed: () {
+              logger.i("Посмотреть подробно: ${arrival.documentNumber}");
+              logger.i("Id: ${arrival.id}");
+              // context.push(AdminRoutes.arrivalDetailPage);
+              context.push(
+                '${AdminRoutes.arrivalDetailPage}/${arrival.organizationId}/${arrival.id}',
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
