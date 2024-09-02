@@ -8,8 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+
+
 class CreateArrivalTopSection extends StatelessWidget {
-  const CreateArrivalTopSection({super.key});
+  const CreateArrivalTopSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,20 +20,16 @@ class CreateArrivalTopSection extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
       ),
-      child: BlocBuilder<SelectedProductsCubit, List<ProductContentEntity>>(
-        builder: (context, selectedProducts) {
+      child: BlocBuilder<SelectedProductsCubit, SelectedProductsState>(
+        builder: (context, state) {
           return Column(
             children: [
-              if (selectedProducts.isNotEmpty) ...[
-                ...selectedProducts.map((product) {
+              if (state.products.isNotEmpty) ...[
+                ...state.products.map((productWithQuantity) {
                   return Column(
                     children: [
                       ProductCardV1(
-                        // productType: product.categoryId,
-                        productType: "Товар",
-                        productName: product.name,
-                        quantity: product.balanceStock.toInt(),
-                        price: product.purchasePrice,
+                        productWithQuantity: productWithQuantity,
                       ),
                       Divider(
                         color: Colors.grey,
@@ -56,7 +54,7 @@ class CreateArrivalTopSection extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${selectedProducts.length} шт",
+                            "${state.totalQuantity} шт",
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
@@ -73,7 +71,7 @@ class CreateArrivalTopSection extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "${selectedProducts.fold(0, (total, product) => total + product.purchasePrice.toInt())} KGS",
+                            "${state.totalPurchasePrice.toStringAsFixed(2)} KGS",
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
@@ -120,6 +118,122 @@ class CreateArrivalTopSection extends StatelessWidget {
     );
   }
 }
+
+
+
+
+// class CreateArrivalTopSection extends StatelessWidget {
+//   const CreateArrivalTopSection({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(16.r),
+//       ),
+//       child: BlocBuilder<SelectedProductsCubit, List<ProductContentEntity>>(
+//         builder: (context, selectedProducts) {
+//           return Column(
+//             children: [
+//               if (selectedProducts.isNotEmpty) ...[
+//                 ...selectedProducts.map((product) {
+//                   return Column(
+//                     children: [
+//                       ProductCardV1(
+//                         // productType: product.categoryId,
+//                         productType: "Товар",
+//                         productName: product.name,
+//                         quantity: product.balanceStock.toInt(),
+//                         price: product.purchasePrice,
+//                       ),
+//                       Divider(
+//                         color: Colors.grey,
+//                         thickness: 1,
+//                         indent: 16.w,
+//                         endIndent: 16.w,
+//                       ),
+//                     ],
+//                   );
+//                 }).toList(),
+//                 Padding(
+//                   padding:
+//                       EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.w),
+//                   child: Column(
+//                     children: [
+//                       Row(
+//                         children: [
+//                           Text(
+//                             "Количество: ",
+//                             style: TextStyle(
+//                               color: Color.fromRGBO(92, 95, 91, 1),
+//                             ),
+//                           ),
+//                           Text(
+//                             "${selectedProducts.length} шт",
+//                             style: const TextStyle(
+//                               fontWeight: FontWeight.w600,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       Row(
+//                         children: [
+//                           Text(
+//                             "Итого закупочная: ",
+//                             style: TextStyle(
+//                               fontSize: 16.sp,
+//                               color: const Color.fromRGBO(92, 95, 91, 1),
+//                             ),
+//                           ),
+//                           Text(
+//                             "${selectedProducts.fold(0, (total, product) => total + product.purchasePrice.toInt())} KGS",
+//                             style: TextStyle(
+//                               fontSize: 16.sp,
+//                               fontWeight: FontWeight.w600,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       SizedBox(height: 16.h),
+//                       CustomButton(
+//                         text: "Добавить товар",
+//                         backgroundColor: Colors.grey.shade200,
+//                         textColor: Colors.green,
+//                         fontSize: 14,
+//                         padding: 10,
+//                         borderRadius: 50,
+//                         onPressed: () {
+//                           context.push(AdminRoutes.productsPage);
+//                         },
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ] else ...[
+//                 Padding(
+//                   padding:
+//                       EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.w),
+//                   child: CustomButton(
+//                     text: "Добавить товар",
+//                     backgroundColor: Colors.grey.shade200,
+//                     textColor: Colors.green,
+//                     fontSize: 14,
+//                     padding: 10,
+//                     borderRadius: 50,
+//                     onPressed: () {
+//                       context.push(AdminRoutes.productsPage);
+//                     },
+//                   ),
+//                 ),
+//               ],
+//             ],
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
 
 

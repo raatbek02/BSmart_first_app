@@ -122,6 +122,8 @@ class ProductContentEntity extends Equatable {
       ];
 }
 
+
+
 class SortEntity extends Equatable {
   final bool empty;
   final bool sorted;

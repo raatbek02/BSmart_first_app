@@ -16,10 +16,11 @@ abstract class ArrivalRepo {
     String id,
   );
 
-    Future<Either<Failure, ProductEntity>> getProductList(
+  Future<Either<Failure, ProductEntity>> getProductList(
     String organizationId, {
     int page = 0,
     int size = 10,
   });
 
+  // Future<Either<Failure, void>> sendArrival(Map<String,dynamic> body, String organizationId);
 }

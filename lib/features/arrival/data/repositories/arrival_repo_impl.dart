@@ -55,4 +55,5 @@ class ArrivalRepoImpl implements ArrivalRepo {
       return Left(Failure("List of products FAILED: ${e.toString()}"));
     }
   }
+  
 }

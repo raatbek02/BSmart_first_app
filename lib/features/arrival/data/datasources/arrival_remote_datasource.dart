@@ -16,6 +16,7 @@ abstract class ArrivalRemoteDataSource {
 
   Future<ProductEntity> getProductList(String organizationId,
       {required int page, required int size});
+
 }
 
 class ArrivalRemoteDataSourceImpl implements ArrivalRemoteDataSource {
@@ -103,6 +104,7 @@ class ArrivalRemoteDataSourceImpl implements ArrivalRemoteDataSource {
       throw Exception('Failed to load product list: $e');
     }
   }
+
 }
 
 // Arrival detail FAAAILED: Exception: Failed to load arrival detail: type 'int' is not a subtype of type 'double'
