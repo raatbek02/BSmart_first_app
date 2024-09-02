@@ -19,9 +19,11 @@ class ArrivalPage extends StatelessWidget {
     final String organizationId = context.read<AuthBloc>().organizationId;
 
     // Используем уже существующий блок и добавляем событие
-    context
-        .read<ArrivalBloc>()
-        .add(FetchArrivalListEvent(organizationId: organizationId));
+    context.read<ArrivalBloc>().add(
+          FetchArrivalListEvent(
+            organizationId: organizationId,
+          ),
+        );
 
     return const ArrivalView();
   }

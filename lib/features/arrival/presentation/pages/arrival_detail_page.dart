@@ -116,12 +116,13 @@ class _ArrivalDetailPageState extends State<ArrivalDetailPage> {
                             ProductCardV2(
                               productType: purchase.type ?? "Не указан",
                               productName: purchase.name,
-                              quantity: purchase.amount,
+                              quantity: purchase.amount.toDouble(),
                               price: purchase.price,
                               productStatus: purchase.balanceStock > 0
                                   ? "Есть в наличии"
                                   : "Нет в наличии",
                               showPlusButton: false,
+                              onPressed: () {},
                             ),
                             SizedBox(height: 12.w),
                           ],

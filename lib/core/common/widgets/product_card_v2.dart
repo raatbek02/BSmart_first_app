@@ -5,10 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProductCardV2 extends StatelessWidget {
   final String productType;
   final String productName;
-  final int quantity;
+  final double quantity;
   final double price;
   final String productStatus;
   final bool showPlusButton;
+  final VoidCallback onPressed;
 
   const ProductCardV2({
     super.key,
@@ -17,6 +18,7 @@ class ProductCardV2 extends StatelessWidget {
     required this.quantity,
     required this.price,
     required this.productStatus,
+    required this.onPressed,
     this.showPlusButton = true,
   });
 
@@ -86,11 +88,7 @@ class ProductCardV2 extends StatelessWidget {
           if (showPlusButton && showPlusButtonInRow)
             _buildButtons(
               icon: Icons.add,
-              onPressed: isAvailable
-                  ? () {
-                      logger.i('Add product clicked');
-                    }
-                  : null,
+              onPressed: isAvailable ? onPressed : null,
             ),
         ],
       ),

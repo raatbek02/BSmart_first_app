@@ -36,9 +36,13 @@ class _CreateArrivalPageState extends State<CreateArrivalPage> {
             children: [
               SearchWidget(),
               SizedBox(height: 16.h),
-              CreateArrivalTopSection(),
-              SizedBox(height: 16.h),
+              // CreateArrivalTopSection(),
               const CreateArrivalBottomSection(),
+
+              SizedBox(height: 16.h),
+              CreateArrivalTopSection(),
+              // const CreateArrivalBottomSection(),
+
               SizedBox(height: 20.h),
               CustomButton(
                 text: "Оприходовать",

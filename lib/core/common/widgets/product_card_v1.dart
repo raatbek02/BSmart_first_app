@@ -6,7 +6,7 @@ class ProductCardV1 extends StatefulWidget {
   final String productType;
   final String productName;
   final int quantity;
-  final int price;
+  final double price;
 
   const ProductCardV1({
     super.key,
