@@ -46,8 +46,15 @@ class AdminRoutes {
       builder: (context, state) => const ArrivalFilterPage(),
     ),
     GoRoute(
-      path: createArrivalPage,
-      builder: (context, state) => const CreateArrivalPage(),
+      path: "$createArrivalPage/:organizationId/:name",
+      builder: (context, state){
+        final orrganizationId = state.pathParameters['organizationId']!;
+        final userName = state.pathParameters['name']!;
+        return  CreateArrivalPage(
+          organizationId: orrganizationId,
+          userName: userName,
+        );
+      }
     ),
     GoRoute(
       path: productsPage,

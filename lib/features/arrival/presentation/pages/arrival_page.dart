@@ -69,7 +69,14 @@ class ArrivalView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           logger.i('Добавить приход товара');
-          context.push(AdminRoutes.createArrivalPage);
+          // context.push(AdminRoutes.createArrivalPage);
+          //           context.push(
+          //   '${AdminRoutes.createArrivalPage}/${context.read<AuthBloc>().organizationId}',
+          // );
+
+          context.push(
+            '${AdminRoutes.createArrivalPage}/${context.read<AuthBloc>().organizationId}/${context.read<AuthBloc>().userName}',
+          );
         },
         backgroundColor: Colors.green,
         child: SvgPicture.asset(

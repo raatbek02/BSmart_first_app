@@ -3,6 +3,7 @@ import 'package:bsmart_first_app/features/arrival/data/repositories/arrival_repo
 import 'package:bsmart_first_app/features/arrival/domain/repositories/arrival_repo.dart';
 import 'package:bsmart_first_app/features/arrival/domain/usecase/arrival_detail_usecase.dart';
 import 'package:bsmart_first_app/features/arrival/domain/usecase/arrival_usecase.dart';
+import 'package:bsmart_first_app/features/arrival/domain/usecase/create_usecase_usecase.dart';
 import 'package:bsmart_first_app/features/arrival/domain/usecase/product_list_usecase.dart';
 import 'package:bsmart_first_app/features/arrival/presentation/bloc/arrival_bloc/arrival_bloc.dart';
 import 'package:bsmart_first_app/features/arrival/presentation/bloc/arrival_detail_bloc/arrival_detail_bloc.dart';
@@ -25,9 +26,11 @@ Future<void> initArrivalDependencies(GetIt sl) async {
   sl.registerLazySingleton(() => ArrivalUseCase(arrivalRepo: sl()));
   sl.registerLazySingleton(() => ArrivalDetailUseCase(arrivalRepo: sl()));
   sl.registerLazySingleton(() => ProductListUsecase(arrivalRepo: sl()));
+  sl.registerLazySingleton(() => CreateArrivalUseCase(arrivalRepo: sl()));
+
 
   // Blocs
-  sl.registerFactory(() => ArrivalBloc(arrivalUseCase: sl()));
+  sl.registerFactory(() => ArrivalBloc(arrivalUseCase: sl(), createArrivalUseCase: sl()));
   sl.registerFactory(() => ArrivalDetailBloc(arrivalDetailUseCase: sl()));
   sl.registerFactory(() => ProductBloc(productListUsecase: sl()));
 

@@ -20,13 +20,12 @@ class AppBlocProviders extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>.value(value: authBloc),
 
-        BlocProvider<ArrivalBloc>(create: (context)=> sl<ArrivalBloc>()),
+        BlocProvider<ArrivalBloc>(create: (context) => sl<ArrivalBloc>()),
 
-        BlocProvider<ArrivalDetailBloc>(create: (context)=> sl<ArrivalDetailBloc>()),
+        BlocProvider<ArrivalDetailBloc>(
+            create: (context) => sl<ArrivalDetailBloc>()),
 
-        BlocProvider<ProductBloc>(
-            create: (context) => sl<ProductBloc>()),
-
+        BlocProvider<ProductBloc>(create: (context) => sl<ProductBloc>()),
 
 // Cubits
         BlocProvider<SelectedProductsCubit>(

@@ -1,7 +1,9 @@
 import 'package:bsmart_first_app/core/common/widgets/custom_text_field.dart';
 import 'package:bsmart_first_app/core/common/widgets/select_button_widget.dart';
 import 'package:bsmart_first_app/core/helpers/my_logger.dart';
+import 'package:bsmart_first_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateArrivalBottomSection extends StatefulWidget {
@@ -14,10 +16,17 @@ class CreateArrivalBottomSection extends StatefulWidget {
 
 class _CreateArrivalBottomSectionState
     extends State<CreateArrivalBottomSection> {
-  TextEditingController autorController =
-      TextEditingController(text: 'Данил Усманов');
+  late TextEditingController autorController;
+
+  @override
+  void initState() {
+    super.initState();
+    autorController =
+        TextEditingController(text: context.read<AuthBloc>().userName);
+  }
+
   TextEditingController documentNumberController =
-      TextEditingController(text: 'ПР-12345');
+      TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +36,7 @@ class _CreateArrivalBottomSectionState
           label: "Автор",
           isRequired: true,
           controller: autorController,
+          readOnly: true,
         ),
         SizedBox(height: 8.w),
         SelectButtonWidget(
@@ -42,8 +52,9 @@ class _CreateArrivalBottomSectionState
         ),
         SizedBox(height: 8.w),
         CustomTextField(
-          label: "Номер документа",
-          isRequired: true,
+          label: "Номер документа(Опционально)",
+          isRequired: false,
+          hintText: "Введите номер документа",
           controller: documentNumberController,
         ),
         SizedBox(height: 8.w),

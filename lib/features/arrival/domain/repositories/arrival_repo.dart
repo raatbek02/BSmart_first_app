@@ -1,6 +1,7 @@
 import 'package:bsmart_first_app/core/errors/errors.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_detail_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_entitity.dart';
+import 'package:bsmart_first_app/features/arrival/domain/entities/create_arrival_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/product_entity.dart';
 import 'package:dartz/dartz.dart';
 
@@ -22,5 +23,7 @@ abstract class ArrivalRepo {
     int size = 10,
   });
 
-  // Future<Either<Failure, void>> sendArrival(Map<String,dynamic> body, String organizationId);
+    Future<Either<Failure, String>> createArrival(
+      String organizationId, CreateArrivalEntity arrival);
+
 }

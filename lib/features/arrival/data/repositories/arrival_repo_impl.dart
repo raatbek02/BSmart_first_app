@@ -2,6 +2,7 @@ import 'package:bsmart_first_app/core/errors/errors.dart';
 import 'package:bsmart_first_app/features/arrival/data/datasources/arrival_remote_datasource.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_detail_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_entitity.dart';
+import 'package:bsmart_first_app/features/arrival/domain/entities/create_arrival_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/product_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/repositories/arrival_repo.dart';
 import 'package:dartz/dartz.dart';
@@ -56,4 +57,16 @@ class ArrivalRepoImpl implements ArrivalRepo {
     }
   }
   
+
+  @override
+  Future<Either<Failure, String>> createArrival(
+      String organizationId, CreateArrivalEntity arrival) async {
+    try {
+      final result =
+          await remoteDatasource.createArrival(organizationId, arrival);
+      return Right(result);
+    } catch (e) {
+      return Left(Failure("Failed to create arrival: ${e.toString()}"));
+    }
+  }
 }

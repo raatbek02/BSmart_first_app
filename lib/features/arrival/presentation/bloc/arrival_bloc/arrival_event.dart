@@ -29,3 +29,16 @@ final class ClearArrivalListEvent extends ArrivalEvent {}
 
 
 
+// For create arrival
+final class CreateArrivalEvent extends ArrivalEvent {
+  final String organizationId;
+  final CreateArrivalEntity arrival;
+
+  const CreateArrivalEvent({
+    required this.organizationId,
+    required this.arrival,
+  });
+
+  @override
+  List<Object> get props => [organizationId, arrival];
+}

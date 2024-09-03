@@ -4,6 +4,7 @@ import 'package:bsmart_first_app/features/arrival/data/models/arrival_model.dart
 import 'package:bsmart_first_app/features/arrival/data/models/product_model.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_detail_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_entitity.dart';
+import 'package:bsmart_first_app/features/arrival/domain/entities/create_arrival_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/product_entity.dart';
 import 'package:dio/dio.dart';
 
@@ -16,6 +17,10 @@ abstract class ArrivalRemoteDataSource {
 
   Future<ProductEntity> getProductList(String organizationId,
       {required int page, required int size});
+
+
+  Future<String> createArrival(
+      String organizationId, CreateArrivalEntity arrival);
 
 }
 
@@ -102,6 +107,32 @@ class ArrivalRemoteDataSourceImpl implements ArrivalRemoteDataSource {
       throw Exception('Failed to load product list: ${e.message}');
     } catch (e) {
       throw Exception('Failed to load product list: $e');
+    }
+  }
+
+
+  @override
+  Future<String> createArrival(
+      String organizationId, CreateArrivalEntity arrival) async {
+    try {
+      final response = await apiClient.postData(
+        '/api/products/purchases/$organizationId',
+        arrival.toJson(),
+      );
+
+      if (response.statusCode == 201) {
+        if (response.data is String) {
+          return response.data as String;
+        } else {
+          throw Exception('Unexpected response format');
+        }
+      } else {
+        throw Exception('Failed to create arrival: ${response.statusMessage}');
+      }
+    } on DioException catch (e) {
+      throw Exception('Failed to create arrival: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to create arrival: $e');
     }
   }
 

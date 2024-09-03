@@ -35,6 +35,14 @@ final class ArrivalError extends ArrivalState {
   List<Object> get props => [message];
 }
 
+// For create arrival
+final class ArrivalCreated extends ArrivalState {
+  final String arrivalId;
 
+  const ArrivalCreated(this.arrivalId);
+
+  @override
+  List<Object> get props => [arrivalId];
+}
 
 

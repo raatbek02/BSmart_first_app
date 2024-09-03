@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final bool isRequired;
   final TextEditingController controller;
   final String hintText;
+  final bool readOnly;
 
   const CustomTextField({
     super.key,
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     this.isRequired = false,
     required this.controller,
     this.hintText = '',
+    this.readOnly = false,
   });
 
   @override
@@ -52,6 +54,7 @@ class CustomTextField extends StatelessWidget {
             // ],
           ),
           child: TextField(
+            readOnly: readOnly,
             controller: controller,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(

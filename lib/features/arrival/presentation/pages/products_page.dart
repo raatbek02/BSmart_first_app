@@ -62,7 +62,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                 productType: "Товар",
                                 productName: product.name,
                                 quantity: product.balanceStock,
-                                price: product.sellingPrice,
+                                price: product.purchasePrice,
                                 productStatus: product.balanceStock > 0
                                     ? "Есть в наличии"
                                     : "Нет в наличии",
