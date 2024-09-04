@@ -2,10 +2,12 @@ import 'package:bsmart_first_app/core/api/api_client.dart';
 import 'package:bsmart_first_app/features/arrival/data/models/arrival_detail_model.dart';
 import 'package:bsmart_first_app/features/arrival/data/models/arrival_model.dart';
 import 'package:bsmart_first_app/features/arrival/data/models/product_model.dart';
+import 'package:bsmart_first_app/features/arrival/data/models/providers_model.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_detail_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_entitity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/create_arrival_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/product_entity.dart';
+import 'package:bsmart_first_app/features/arrival/domain/entities/providers_entity.dart';
 import 'package:dio/dio.dart';
 
 abstract class ArrivalRemoteDataSource {
@@ -18,10 +20,10 @@ abstract class ArrivalRemoteDataSource {
   Future<ProductEntity> getProductList(String organizationId,
       {required int page, required int size});
 
-
   Future<String> createArrival(
       String organizationId, CreateArrivalEntity arrival);
 
+Future<List<ProvidersEntity>> getProviders(String organizationId);
 }
 
 class ArrivalRemoteDataSourceImpl implements ArrivalRemoteDataSource {
@@ -110,7 +112,6 @@ class ArrivalRemoteDataSourceImpl implements ArrivalRemoteDataSource {
     }
   }
 
-
   @override
   Future<String> createArrival(
       String organizationId, CreateArrivalEntity arrival) async {
@@ -135,7 +136,31 @@ class ArrivalRemoteDataSourceImpl implements ArrivalRemoteDataSource {
       throw Exception('Failed to create arrival: $e');
     }
   }
-
+  
+@override
+  Future<List<ProvidersEntity>> getProviders(String organizationId) async {
+    try {
+      final response =
+          await apiClient.getData('/api/products/dictionaries/$organizationId/providers');
+      if (response.statusCode == 200) {
+        if (response.data is List) {
+          return (response.data as List)
+              .map((provider) =>
+                  ProvidersModel.fromJson(provider as Map<String, dynamic>))
+              .toList();
+        } else {
+          throw Exception('Unexpected response format');
+        }
+      } else {
+        throw Exception(
+            'Failed to load providers list : ${response.statusMessage}');
+      }
+    } on DioException catch (e) {
+      throw Exception('Failed to load providers list: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to load providers list: $e');
+    }
+  }
 }
 
 // Arrival detail FAAAILED: Exception: Failed to load arrival detail: type 'int' is not a subtype of type 'double'

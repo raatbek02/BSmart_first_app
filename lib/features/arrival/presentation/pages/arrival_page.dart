@@ -22,6 +22,7 @@ class ArrivalPage extends StatelessWidget {
     context.read<ArrivalBloc>().add(
           FetchArrivalListEvent(
             organizationId: organizationId,
+            size: 20,
           ),
         );
 

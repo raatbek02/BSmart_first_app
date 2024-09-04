@@ -1,7 +1,6 @@
 import 'package:bsmart_first_app/core/common/widgets/custom_button.dart';
 import 'package:bsmart_first_app/core/common/widgets/product_card_v1.dart';
 import 'package:bsmart_first_app/core/routes/admin_routes.dart';
-import 'package:bsmart_first_app/features/arrival/domain/entities/product_entity.dart';
 import 'package:bsmart_first_app/features/arrival/presentation/cubit/selected_products_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,7 @@ import 'package:go_router/go_router.dart';
 
 
 class CreateArrivalTopSection extends StatelessWidget {
-  const CreateArrivalTopSection({Key? key}) : super(key: key);
+  const CreateArrivalTopSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +38,7 @@ class CreateArrivalTopSection extends StatelessWidget {
                       ),
                     ],
                   );
-                }).toList(),
+                }),
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.w),
@@ -47,7 +46,7 @@ class CreateArrivalTopSection extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             "Количество: ",
                             style: TextStyle(
                               color: Color.fromRGBO(92, 95, 91, 1),

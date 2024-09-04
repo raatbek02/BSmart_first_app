@@ -77,10 +77,15 @@ class _HomePageState extends State<HomePage> {
                   context: context,
                   title: 'Выберите магазин',
                   items: stores,
-                  selectedValue: _selectedStore,
+                  selectedValue: _selectedStore != null
+                      ? {
+                          'name': _selectedStore!,
+                          'iconPath': 'assets/svg/shop_icon.svg'
+                        }
+                      : null,
                   onItemSelected: (value) {
                     setState(() {
-                      _selectedStore = value;
+                      _selectedStore = (value)?['name'];
                     });
                   },
                 ),
@@ -126,6 +131,7 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
 
   void _logout(BuildContext context) {
     BlocProvider.of<AuthBloc>(context).add(LogoutEvent());

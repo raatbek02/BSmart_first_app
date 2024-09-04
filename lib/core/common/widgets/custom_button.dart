@@ -5,8 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
-  // final Color backgroundColor;
+  final VoidCallback? onPressed;
   final Color textColor;
   final double fontSize;
   final FontWeight fontWeight;
@@ -38,7 +37,9 @@ class CustomButton extends StatelessWidget {
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(borderRadius.r),
       child: InkWell(
-        splashFactory: InkRipple.splashFactory,
+        splashFactory: onPressed != null
+            ? InkRipple.splashFactory
+            : NoSplash.splashFactory,
         borderRadius: BorderRadius.circular(borderRadius.r),
         onTap: onPressed,
         child: Ink(

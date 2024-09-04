@@ -35,6 +35,27 @@ final class ArrivalError extends ArrivalState {
   List<Object> get props => [message];
 }
 
+// For getting provders
+final class ProvidersLoading extends ArrivalState {}
+
+final class ProvidersLoaded extends ArrivalState {
+  final List<ProvidersEntity> providers;
+
+  const ProvidersLoaded({required this.providers});
+
+  @override
+  List<Object> get props => [providers];
+}
+
+final class ProvidersError extends ArrivalState {
+  final String message;
+
+  const ProvidersError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 // For create arrival
 final class ArrivalCreated extends ArrivalState {
   final String arrivalId;

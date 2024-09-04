@@ -21,13 +21,20 @@ final class FetchArrivalListEvent extends ArrivalEvent {
   });
 
   @override
-List<Object> get props => [organizationId, page, size, forceRefresh];
+  List<Object> get props => [organizationId, page, size, forceRefresh];
 }
 
 final class ClearArrivalListEvent extends ArrivalEvent {}
 
+// For getting provders
+final class FetchProvidersEvent extends ArrivalEvent {
+  final String organizationId;
 
+  const FetchProvidersEvent({required this.organizationId});
 
+  @override
+  List<Object> get props => [organizationId];
+}
 
 // For create arrival
 final class CreateArrivalEvent extends ArrivalEvent {

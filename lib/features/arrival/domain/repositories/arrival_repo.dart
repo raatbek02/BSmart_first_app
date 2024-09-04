@@ -3,6 +3,7 @@ import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_detail
 import 'package:bsmart_first_app/features/arrival/domain/entities/arrival_entitity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/create_arrival_entity.dart';
 import 'package:bsmart_first_app/features/arrival/domain/entities/product_entity.dart';
+import 'package:bsmart_first_app/features/arrival/domain/entities/providers_entity.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ArrivalRepo {
@@ -23,7 +24,9 @@ abstract class ArrivalRepo {
     int size = 10,
   });
 
-    Future<Either<Failure, String>> createArrival(
+  Future<Either<Failure, String>> createArrival(
       String organizationId, CreateArrivalEntity arrival);
 
+Future<Either<Failure, List<ProvidersEntity>>> getProviders(
+      String organizationId);
 }

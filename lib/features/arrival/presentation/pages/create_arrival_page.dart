@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CreateArrivalPage extends StatefulWidget {
   final String organizationId;
   final String userName;
+
   const CreateArrivalPage({
     super.key,
     required this.organizationId,
@@ -24,7 +25,42 @@ class CreateArrivalPage extends StatefulWidget {
 }
 
 class _CreateArrivalPageState extends State<CreateArrivalPage> {
+  String? _selectedProviderId;
+  String _documentNumber = '0'; // По умолчанию 0
+  DateTime _selectedDate = DateTime.now();
+
+  bool get isSubmitButtonEnabled {
+    final selectedProductsState = context.read<SelectedProductsCubit>().state;
+    return _selectedProviderId != null &&
+        selectedProductsState.products.isNotEmpty;
+  }
+
+  void _handleProviderSelected(String providerId) {
+    setState(() {
+      _selectedProviderId = providerId;
+    });
+  }
+
+  void _handleDocumentNumberChanged(String documentNumber) {
+    setState(() {
+      _documentNumber = documentNumber.isNotEmpty ? documentNumber : '0';
+    });
+  }
+
+  void _handleDateSelected(DateTime date) {
+    // Добавляем новый метод
+    setState(() {
+      _selectedDate = date;
+    });
+  }
+
   Future<void> _submitArrival() async {
+    if (!isSubmitButtonEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Не выбран поставщик или продукты')),
+      );
+      return;
+    }
     final selectedProductsState = context.read<SelectedProductsCubit>().state;
     final organizationId = widget.organizationId;
     final author = widget.userName;
@@ -36,10 +72,9 @@ class _CreateArrivalPageState extends State<CreateArrivalPage> {
       byCash: selectedProductsState.totalPurchasePrice,
       change: 0,
       author: author,
-      dateTime: DateTime.now(),
-      documentNumber: 0, // Установите правильное значение, если это необходимо
-      provider:
-          "b96f050c-386b-49ff-b77e-630e0d94938b", // Установите ID поставщика
+      dateTime: _selectedDate,
+      documentNumber: int.tryParse(_documentNumber) ?? 0,
+      provider: _selectedProviderId ?? "",
       id: null,
       purchases: selectedProductsState.products.map((productWithQuantity) {
         return PurchaseEntity(
@@ -48,7 +83,7 @@ class _CreateArrivalPageState extends State<CreateArrivalPage> {
           price: productWithQuantity.product.purchasePrice,
           sum: productWithQuantity.quantity *
               productWithQuantity.product.purchasePrice,
-          discount: 0, // Установите правильное значение, если это необходимо
+          discount: 0,
           sellingPrice: productWithQuantity.product.sellingPrice,
           type: "BOOKING",
           bundle: false,
@@ -56,8 +91,8 @@ class _CreateArrivalPageState extends State<CreateArrivalPage> {
         );
       }).toList(),
       totalSumFinal: selectedProductsState.totalPurchasePrice,
-      totalDiscount: 0, // Установите правильное значение, если это необходимо
-      byCashless: 0, // Установите правильное значение, если это необходимо
+      totalDiscount: 0,
+      byCashless: 0,
       count: selectedProductsState.totalQuantity,
       totalSum: selectedProductsState.totalPurchasePrice,
     );
@@ -66,11 +101,6 @@ class _CreateArrivalPageState extends State<CreateArrivalPage> {
           organizationId: organizationId,
           arrival: createArrivalEntity,
         ));
-
-    logger.i("totalPurchasePrice: ${selectedProductsState.totalPurchasePrice}");
-    logger.i("totalQuantity: ${selectedProductsState.totalQuantity}");
-    logger.i("products: ${selectedProductsState.products}");
-
   }
 
   @override
@@ -96,20 +126,22 @@ class _CreateArrivalPageState extends State<CreateArrivalPage> {
               SearchWidget(),
               SizedBox(height: 16.h),
               const CreateArrivalTopSection(),
-              // const CreateArrivalBottomSection(),
-
               SizedBox(height: 16.h),
-              // CreateArrivalTopSection(),
-              const CreateArrivalBottomSection(),
-
+              CreateArrivalBottomSection(
+                onProviderSelected: _handleProviderSelected,
+                onDocumentNumberChanged: _handleDocumentNumberChanged,
+                onDateSelected: _handleDateSelected,
+              ),
               SizedBox(height: 20.h),
               CustomButton(
                 text: "Оприходовать",
                 padding: 14,
-                onPressed: () {
-                  logger.i("Оприходовать");
-                  _submitArrival();
-                },
+                onPressed: isSubmitButtonEnabled ? _submitArrival : null,
+                backgroundColor: isSubmitButtonEnabled
+                    ? const Color.fromRGBO(79, 174, 71, 1)
+                    : Colors.grey.shade400,
+                textColor:
+                    isSubmitButtonEnabled ? Colors.white : Colors.grey.shade700,
               ),
               SizedBox(height: 10.h),
               CustomButton(
